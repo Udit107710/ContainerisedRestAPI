@@ -5,7 +5,7 @@ To leverage the API you will need to follow the following steps:
 	2) Clone the repo and run docker-compose up
 	3) Access the django container and create a new user
 
-Prediction API endpoint: localhost:8080/restapp/predict/ [br]
+Prediction API endpoint: localhost:8080/restapp/predict/ <br>
 You can use various ways like Postman or a script using Request library of Python to check the condition of API. I have attached screenshots of Postman application usage.
 
 ### Specify the auth details here
