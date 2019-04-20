@@ -14,6 +14,7 @@ from rest_framework.decorators import api_view
 from rest_framework import generics
 from rest_framework import permissions
 from rest_framework import status
+from rest_framework.parsers import JSONParser
 import os
 import json
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -23,7 +24,9 @@ file_name = dir_path + '/iris_svm_model.pkl'
 class Predict(APIView):
     permission_classes= (permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly)
     def post(self, request, format=None):
-        serializer = ResultSerializer(data=request.POST)
+        data = JSONParser().parse(request)
+        serializer = ResultSerializer(data=data)
+        #serializer = ResultSerializer(data=request.data) if using form data for input
         if serializer.is_valid():
             petal_length = serializer.validated_data['petal_length']
             petal_width = serializer.validated_data['petal_width']
@@ -51,13 +54,10 @@ class Predict(APIView):
         serializer.save(owner= self.request.user)
 
 
-
-class UserList(generics.ListAPIView):
-    permission_classes= (permissions.IsAuthenticatedOrReadOnly,)
-    queryset= User.objects.all()
-    serializer_class= UserSerializer
-
 class UserDetail(generics.RetrieveAPIView):
     queryset= User.objects.all()
     serializer_class= UserSerializer
 
+class UserList(generics.ListAPIView):
+    queryset= User.objects.all()
+    serializer_class= UserSerializer
